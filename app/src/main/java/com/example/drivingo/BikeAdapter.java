@@ -72,7 +72,14 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder>{
             int position = getAdapterPosition();
             if (position!=RecyclerView.NO_POSITION){
                 Bike bike = mBikes.get(position);
-                Toast.makeText(context, bike.getModel(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,BikeDetails.class);
+                intent.putExtra("model",bike.getModel());
+                intent.putExtra("bikeNo",bike.getBikeNo());
+                intent.putExtra("image",bike.getImage());
+                intent.putExtra("distance",bike.getDistance());
+                intent.putExtra("location",bike.getLocation());
+                context.startActivity(intent);
+                //Toast.makeText(context, bike.getModel(), Toast.LENGTH_SHORT).show();
             }
         }
     }
