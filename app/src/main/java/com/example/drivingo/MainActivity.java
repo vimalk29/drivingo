@@ -1,7 +1,6 @@
 package com.example.drivingo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,20 +17,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.drivingo.model.Bike;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,11 +33,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,11 +62,14 @@ public class MainActivity extends AppCompatActivity {
         BtnRefresh = findViewById(R.id.button);
         progressBar = findViewById(R.id.progressBar);
         LocationLayout = findViewById(R.id.layout_location);
+        LocationLayout.setEnabled(false);
         LocationLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "open Maps", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this,GetLocation.class);
+                intent.putExtra("latitude",lat);
+                intent.putExtra("longitude",lng);
                 startActivityForResult(intent,3);
             }
         });
@@ -123,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void getLocation() {
         BtnRefresh.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
+        LocationLayout.setEnabled(false);
         client = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermission();
@@ -173,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 BtnRefresh.setEnabled(true);
                 progressBar.setVisibility(View.GONE);
+                LocationLayout.setEnabled(true);
             }
         });
 
@@ -208,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         BtnRefresh.setEnabled(true);
         progressBar.setVisibility(View.GONE);
+        LocationLayout.setEnabled(true);
     }
 
     private void notifyUser(final boolean openSetting){

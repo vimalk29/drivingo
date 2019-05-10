@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,9 +19,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 public class GetLocation extends FragmentActivity implements OnMapReadyCallback {
 
@@ -32,6 +27,7 @@ public class GetLocation extends FragmentActivity implements OnMapReadyCallback 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Marker marker;
     private Button btnSet;
+    private double lat,lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +37,11 @@ public class GetLocation extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            lat = bundle.getDouble("latitude");
+            lng = bundle.getDouble("longitude");
+        }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         btnSet = findViewById(R.id.setButton);
         btnSet.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +93,7 @@ public class GetLocation extends FragmentActivity implements OnMapReadyCallback 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            /*mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
                     mLastLocation = location;
@@ -104,7 +105,13 @@ public class GetLocation extends FragmentActivity implements OnMapReadyCallback 
                             mLastLocation.getLongitude()));
                     marker = mMap.addMarker(markerOptions);
                 }
-            });
+            });*/
+            LatLng latLng = new LatLng(lat,lng);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, 17));
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            marker = mMap.addMarker(markerOptions);
         }
         catch (Exception e){
             e.printStackTrace();
