@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Bike bike = postSnapshot.getValue(Bike.class);
-                    if(bike !=null){
+                    if(bike !=null&& bike.isIsAvailable()){
                         double distance = calculateDistance(bike.getLocation().get("latitude"),bike.getLocation().get("longitude"));
                         bike.setDistance(distance);
                         bikeList.add(bike);

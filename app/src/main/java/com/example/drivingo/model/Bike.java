@@ -45,7 +45,7 @@ public class Bike implements Comparable<Bike>{
         return location;
     }
 
-    public boolean isAvailable() {
+    public boolean isIsAvailable() {
         return isAvailable;
     }
 
