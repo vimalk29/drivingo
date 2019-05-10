@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Drivingo</string>
+    <string name="current_location">Current Location</string>
+    <string name="model_name">Model Name</string>
+    <string name="distance">Distance :</string>
+    <string name="refresh">Refresh</string>
+    <string name="title_activity_get_location">Map</string>
+</resources>
