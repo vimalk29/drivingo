@@ -17,7 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BikeDetails"></activity>
+        <activity android:name=".Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".UserInput"/>
+
+        <activity android:name=".BikeDetails" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -27,19 +36,16 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
             android:name=".GetLocation"
             android:label="@string/title_activity_get_location" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

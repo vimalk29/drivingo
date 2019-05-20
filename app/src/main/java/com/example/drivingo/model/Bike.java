@@ -9,16 +9,22 @@ public class Bike implements Comparable<Bike>{
     private HashMap<String,Double> location;
     private boolean isAvailable;
     private double distance;
+    private int rent;
 
     public Bike(){}
 
-    public Bike(String model, String bikeNo, String image, HashMap<String, Double> location, boolean isAvailable) {
+    public Bike(String model, String bikeNo, String image, HashMap<String, Double> location, boolean isAvailable,int rent) {
         this.model = model;
         this.bikeNo = bikeNo;
         this.image = image;
         this.location = location;
         this.isAvailable = isAvailable;
         this.distance=-1;
+        this.rent = rent;
+    }
+
+    public int getRent() {
+        return rent;
     }
 
     public double getDistance() {

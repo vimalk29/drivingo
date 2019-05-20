@@ -24,7 +24,7 @@
             <LinearLayout
                 android:padding="25dp"
                 android:orientation="vertical"
-                android:layout_weight="7.5"
+                android:layout_weight="6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <TextView
@@ -36,11 +36,27 @@
                 <TextView
                     android:id="@+id/tv_distance"
                     android:textStyle="bold"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:text="@string/distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1.5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_rent"
+                    android:textColor="@color/colorLightGreen"
+                    android:text="1000"
+                    android:textSize="23sp"
+                    android:ems="3"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 

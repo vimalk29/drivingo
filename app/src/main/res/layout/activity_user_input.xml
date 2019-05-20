@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    tools:context=".UserInput">
+    <LinearLayout
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="8.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="date"
+                android:hint="City"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:layout_gravity="center"
+            android:id="@+id/cityBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            app:srcCompat="@android:drawable/ic_menu_mylocation" />
+    </LinearLayout>
+    <LinearLayout
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="8.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="date"
+                android:hint="Start Date"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:layout_gravity="center"
+            android:id="@+id/startDateBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+    </LinearLayout>
+    <LinearLayout
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="8.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etEndDate"
+                android:layout_width="match_parent"
+                android:inputType="date"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="End Date"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:layout_gravity="center"
+            android:id="@+id/endDateBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/searchBtn"
+        android:text="Search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
