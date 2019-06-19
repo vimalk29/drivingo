@@ -1,9 +1,11 @@
 package com.example.drivingo.model;
 
 public class Booking {
-    private String by,date,from,to;
+    private String by, date, from, to;
 
-    public  Booking(){}
+    public Booking(){
+
+    }
     public Booking(String by, String date, String from, String to) {
         this.by = by;
         this.date = date;

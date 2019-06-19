@@ -1,8 +1,7 @@
-package com.example.drivingo;
+package com.example.drivingo.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.drivingo.Activities.BikeDetails;
+import com.example.drivingo.R;
 import com.example.drivingo.model.Bike;
-import com.example.drivingo.model.CommonValues;
+import com.example.drivingo.Common.CommonValues;
 import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,7 +77,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder>{
             int position = getAdapterPosition();
             if (position!=RecyclerView.NO_POSITION){
                 CommonValues.CommonBikeList = mBikes;
-                Intent intent = new Intent(context,BikeDetails.class);
+                Intent intent = new Intent(context, BikeDetails.class);
                 intent.putExtra("position",position);
 //                intent.putExtra("model",bike.getModel());
 //                intent.putExtra("bikeNo",bike.getBikeNo());

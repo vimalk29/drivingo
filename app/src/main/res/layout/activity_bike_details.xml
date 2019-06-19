@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_margin="20dp"
-    tools:context=".BikeDetails" >
+    tools:context=".Activities.BikeDetails" >
 
     <ImageView
         android:id="@+id/imageView"

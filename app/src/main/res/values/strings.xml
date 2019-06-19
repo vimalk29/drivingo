@@ -6,4 +6,36 @@
     <string name="refresh">Refresh</string>
     <string name="title_activity_get_location">Map</string>
     <string name="location">Location</string>
+    <string name="drivingo">Drivingo</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="please_check_mobile_no_or_password">Please check Mobile no. or password</string>
+    <string name="otp">OTP</string>
+    <string name="enter_mobile_no_to_continue">Enter Mobile No. to continue</string>
+    <string name="logout">Logout</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="city">City</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="search">Search</string>
+    <string name="please_wait">Please Wait…</string>
+    <string name="email">Email</string>
+    <string name="phone">Mobile No.</string>
+    <string name="contact">Mobile here</string>
+    <string name="Name">Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="log_out">Log out</string>
+    <string name="date">Date</string>
+    <string name="direction">Direction</string>
+    <string name="rent_hrs">Rent/Hrs</string>
+    <string name="total_rent">Total Rent</string>
+    <string name="address">Address :</string>
+    <string name="model">Model</string>
+    <string name="bike_no">Bike No</string>
+    <string name="booked_on">Booked On</string>
+    <string name="from_to">From : - To :</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="no_bike_found">You Haven\'t Book bike yet! Want to book a bike?</string>
+    <string name="click_here">Click Here</string>
 </resources>

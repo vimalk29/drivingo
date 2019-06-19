@@ -10,10 +10,11 @@ public class Bike implements Comparable<Bike>{
     private boolean isAvailable;
     private double distance;
     private int rent;
+    private String preBookTime;
 
     public Bike(){}
 
-    public Bike(String model, String bikeNo, String image, HashMap<String, Double> location, boolean isAvailable,int rent) {
+    public Bike(String model, String bikeNo, String image, HashMap<String, Double> location, boolean isAvailable,int rent,String preBookTime) {
         this.model = model;
         this.bikeNo = bikeNo;
         this.image = image;
@@ -21,6 +22,7 @@ public class Bike implements Comparable<Bike>{
         this.isAvailable = isAvailable;
         this.distance=-1;
         this.rent = rent;
+        this.preBookTime = preBookTime;
     }
 
     public int getRent() {
@@ -53,6 +55,10 @@ public class Bike implements Comparable<Bike>{
 
     public boolean isIsAvailable() {
         return isAvailable;
+    }
+
+    public String getPreBookTime() {
+        return preBookTime;
     }
 
     @Override
