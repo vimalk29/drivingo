@@ -139,6 +139,8 @@ public class Profile extends Fragment implements View.OnClickListener {
                         enableButtons(true);
                     }
                 });
+            else
+                enableButtons(true);
 
             tvName.setText(name);
             tvEmail.setText(email);

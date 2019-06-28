@@ -17,20 +17,24 @@ import android.widget.Toast;
 import com.example.drivingo.Common.AlertMessage;
 import com.example.drivingo.Common.CommonValues;
 import com.example.drivingo.Common.SessionManagement;
+import com.example.drivingo.Fragments.Help;
+import com.example.drivingo.Fragments.Offers;
 import com.example.drivingo.R;
 import com.example.drivingo.Fragments.Bookings;
 import com.example.drivingo.Fragments.Profile;
 import com.example.drivingo.Fragments.UserInputs;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements UserInputs.OnFragmentInteractionListener, Profile.OnFragmentInteractionListener, Bookings.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements UserInputs.OnFragmentInteractionListener, Profile.OnFragmentInteractionListener, Bookings.OnFragmentInteractionListener,Offers.OnFragmentInteractionListener,Help.OnFragmentInteractionListener {
     private boolean doubleBackToExitPressedOnce = false;
     private SessionManagement sessionManagement;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int tabIcons[] = {
             R.drawable.icon_action_bike,
+            R.drawable.icon_offers,
             R.drawable.icon_action_search,
+            R.drawable.icon_help,
             R.drawable.icon_action_profile
     };
 
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
         if (code == 1)//logout
             logOut();
         else if(code ==2) {//book bike
-            TabLayout.Tab tab = tabLayout.getTabAt(1);
+            TabLayout.Tab tab = tabLayout.getTabAt(2);
             if (tab != null)
                 tab.select();
         }
@@ -59,8 +63,12 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
                 case 0:
                     return new Bookings();
                 case 1:
-                    return new UserInputs();
+                    return new Offers();
                 case 2:
+                    return new UserInputs();
+                case 3:
+                    return new Help();
+                case 4:
                     return new Profile();
                 default:
                     return null;
@@ -88,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
         tabLayout.addTab(tabLayout.newTab().setIcon(tabIcons[0]));
         tabLayout.addTab(tabLayout.newTab().setIcon(tabIcons[1]));
         tabLayout.addTab(tabLayout.newTab().setIcon(tabIcons[2]));
+        tabLayout.addTab(tabLayout.newTab().setIcon(tabIcons[3]));
+        tabLayout.addTab(tabLayout.newTab().setIcon(tabIcons[4]));
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -111,10 +122,10 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
             }
         });
 
-        int index=1;
+        int index=2;
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            index = bundle.getInt("open_tab",1);
+            index = bundle.getInt("open_tab",2);
         }
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         if (tab != null)
