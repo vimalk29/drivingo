@@ -1,22 +1,33 @@
 package com.example.drivingo.Activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +38,7 @@ import com.example.drivingo.R;
 import com.example.drivingo.model.Bike;
 import com.example.drivingo.model.Booking;
 import com.example.drivingo.Common.CommonValues;
+import com.example.drivingo.model.Offer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +48,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,21 +56,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BikeDetails extends AppCompatActivity implements View.OnClickListener {
-    String amount, key, orderID;
-    TextView tvModel, tvBikeNo, tvDistance, tvLocation, tvRent;
+    String amount, key, orderID,error,PROMO;
+    TextView tvModel, tvBikeNo, tvDistance, tvLocation, tvRent, txtPromo;
     ImageView imageView;
     Button btnPay;
     Bike bike;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database;
-    DatabaseReference databaseReference, bookingReference, transactionReference;
+    DatabaseReference databaseReference, bookingReference, transactionReference, offersRef;
+    public SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm a", Locale.getDefault());
     public static SimpleDateFormat preBookTimeFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss", Locale.getDefault());
     long TIME_OUT = 10 * 60000;
     SessionManagement sessionManagement;
-    int REQUEST_CODE = 10;
+    int REQUEST_CODE = 10,hrs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +87,17 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
         imageView = findViewById(R.id.imageView);
         tvRent = findViewById(R.id.tvRent);
         btnPay = findViewById(R.id.btnPay);
+        txtPromo = findViewById(R.id.txtHavePromo);
+
         database = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = database.getReference("Bikes");
         bookingReference = database.getReference("Booking");
         transactionReference = database.getReference("Orders");
+        offersRef = database.getReference("Offers");
         sessionManagement = new SessionManagement(this);
 
+        txtPromo.setOnClickListener(this);
         btnPay.setOnClickListener(this);
         try {
             Bundle bundle = getIntent().getExtras();
@@ -93,7 +113,7 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
                 double lng = bike.getLocation().get("longitude");
                 long time = CommonValues.ToDate.getTime() - CommonValues.FromDate.getTime();
                 //int days = (int)(time/(24*60*60*1000))+1;
-                int hrs = (int) (time / (60 * 60 * 1000)) + 1;
+                hrs = (int) (time / (60 * 60 * 1000)) + 1;
                 CommonValues.rent = bike.getRent() * hrs;
 
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -141,7 +161,7 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    markFlagged(key, bike.getPreBookTime(),false);
+                    markFlagged(key, bike.getPreBookTime(), false);
                 }
             });
 
@@ -163,9 +183,9 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(BikeDetails.this, "bike booked", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(BikeDetails.this,MainActivity.class);
+                        Intent intent = new Intent(BikeDetails.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.putExtra("open_tab",0);
+                        intent.putExtra("open_tab", 0);
                         startActivity(intent);
                         finish();
                     }
@@ -179,7 +199,7 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    private void markFlagged(final String key,String timeNow ,final boolean makeTransaction) {
+    private void markFlagged(final String key, String timeNow, final boolean makeTransaction) {
         this.key = key;
         databaseReference.child(key).child("preBookTime").setValue(timeNow).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -245,7 +265,7 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
                             long diff = timeNow.getTime() - preBookTime.getTime();
                             if (diff > TIME_OUT) {
                                 temp = true;
-                                markFlagged(postSnapshot.getKey(),preBookTimeFormat.format(timeNow), true);//before starting transaction marked it flag so other user not start transaction for the same
+                                markFlagged(postSnapshot.getKey(), preBookTimeFormat.format(timeNow), true);//before starting transaction marked it flag so other user not start transaction for the same
                                 break;
                             }
                         }
@@ -344,7 +364,110 @@ public class BikeDetails extends AppCompatActivity implements View.OnClickListen
                 else
                     requestPermission();
                 break;
+            case R.id.txtHavePromo:
+                getPromoCodeDialog();
+                break;
         }
+    }
+
+    private void getPromoCodeDialog() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.promo_dialog, null, false);
+        final EditText etPromo = view.findViewById(R.id.etPromo);
+        final AVLoadingIndicatorView progressbar = view.findViewById(R.id.progressBar);
+        progressbar.hide();
+
+        final AlertDialog builder = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(false)
+                .setPositiveButton("Apply", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create();
+        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button btnOk = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final String promo = etPromo.getText().toString();
+                        if (promo.length() < 6)
+                            etPromo.setError("Enter a valid promo code");
+                        else {
+                            etPromo.setEnabled(false);
+                            progressbar.show();
+                            offersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.child(promo).exists()) {
+                                        Offer offer = dataSnapshot.child(promo).getValue(Offer.class);
+                                        if (offer != null) {
+                                            try {
+                                                Date currentDate = Calendar.getInstance().getTime();
+                                                Date dateFrom = dateFormat1.parse(offer.getFrom());
+                                                Date dateExpireOn = dateFormat1.parse(offer.getTo());
+                                                 error = "";
+                                                if(currentDate.before(dateFrom))
+                                                    error="Offer didn't start yet";
+                                                else if(currentDate.after(dateExpireOn))
+                                                    error="Offer expired";
+                                                else if(offer.isApplied())
+                                                    error="Code used before";
+                                                if(error.isEmpty()){
+                                                    offer.setApplied(true);
+                                                    final int discount = offer.getDiscount();
+                                                    offersRef.child(promo).setValue(offer).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            CommonValues.rent -=discount;
+                                                            String rent = String.format(Locale.getDefault(), "%-9s: %d(%d*%d-%d)", "Rent", CommonValues.rent, bike.getRent(), hrs,discount);
+
+                                                            tvRent.setText(rent);
+                                                            builder.dismiss();
+                                                            Toast.makeText(BikeDetails.this, "Code applied", Toast.LENGTH_SHORT).show();
+                                                            PROMO = promo;
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(BikeDetails.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                            builder.dismiss();
+                                                        }
+                                                    });
+                                                }else{
+                                                    Toast.makeText(BikeDetails.this, error, Toast.LENGTH_SHORT).show();
+                                                    progressbar.hide();
+                                                    etPromo.setEnabled(true);
+                                                }
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } else{
+                                        Toast.makeText(BikeDetails.this, "invalid", Toast.LENGTH_SHORT).show();
+                                        progressbar.hide();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+        if (!this.isFinishing())
+            builder.show();
     }
 
     @Override

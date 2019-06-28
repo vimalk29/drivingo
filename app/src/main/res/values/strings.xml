@@ -38,4 +38,6 @@
     <string name="to">To</string>
     <string name="no_bike_found">You Haven\'t Book bike yet! Want to book a bike?</string>
     <string name="click_here">Click Here</string>
+    <string name="have_a_promo_click_here">Have a Promo? click here</string>
+    <string name="enter_promo_code">Enter Promo Code</string>
 </resources>

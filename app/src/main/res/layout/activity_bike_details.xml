@@ -59,10 +59,17 @@
         android:typeface="monospace"
         android:textSize="20sp"
         android:text="Rent" />
-
     <Button
         android:id="@+id/btnPay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PAY" />
+    <TextView
+        android:id="@+id/txtHavePromo"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="@string/have_a_promo_click_here"
+        android:textColor="@color/darkBlueTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
