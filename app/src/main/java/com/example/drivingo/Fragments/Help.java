@@ -1,11 +1,14 @@
 package com.example.drivingo.Fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -146,10 +149,10 @@ public class Help extends Fragment implements View.OnClickListener {
                 loadAdapter("FAQs/LiveAssistance");
                 break;
             case R.id.contactMeLayout :
-                String number = contactNo.getText().toString();
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+number));
-                startActivity(callIntent);
+                    String number = contactNo.getText().toString();
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+number));
+                    startActivity(callIntent);
                 break;
         }
     }
