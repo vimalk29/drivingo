@@ -30,12 +30,19 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
     private SessionManagement sessionManagement;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int tabIcons[] = {
+    private int[] tabIcons = {
             R.drawable.icon_action_bike,
             R.drawable.icon_offers,
             R.drawable.icon_action_search,
             R.drawable.icon_help,
             R.drawable.icon_action_profile
+    };
+    private String[] tabNames={
+            "Bookings",
+            "Offers",
+            "Search Bike",
+            "Help & FAQ",
+            "Profile"
     };
 
     @Override
@@ -102,13 +109,17 @@ public class MainActivity extends AppCompatActivity implements UserInputs.OnFrag
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                int position = tab.getPosition();
+                viewPager.setCurrentItem(position);
+                if(getSupportActionBar()!=null)
+                    getSupportActionBar().setTitle(tabNames[position]);
+
             }
 
             @Override
