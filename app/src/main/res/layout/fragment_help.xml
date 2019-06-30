@@ -1,13 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Help">
-
-    <TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Help fragment....make changes in ui" />
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</FrameLayout>
+        <LinearLayout
+            android:weightSum="4"
+            android:orientation="vertical"
+            android:layout_marginVertical="25dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <Button
+                    android:id="@+id/bikeRentingButton"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/motorcycle_button"
+                    android:text="Bike Renting"
+                    android:src="@drawable/motorcycle"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <Button
+                    android:id="@+id/bikeBookingButton"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/wheel_button"
+                    android:text="Bike Booking"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/motorcycle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <Button
+                    android:id="@+id/paymentAndChargesButton"
+                    android:textSize="12sp"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/calculator_button"
+                    android:text="Payment and Charges"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/motorcycle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <Button
+                    android:id="@+id/walletRefundButton"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/wallet_button"
+                    android:text="Wallet  Refund"
+                    android:src="@drawable/motorcycle"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"/>
+                <Button
+                    android:id="@+id/dealsAndDiscountButton"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/discount_button"
+                    android:text="Deals and Discounts"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/motorcycle"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"/>
+                <Button
+                    android:id="@+id/liveAssistanceButton"
+                    android:background="@drawable/style_text_layout"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/support_button"
+                    android:text="Live Assistance"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/motorcycle"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/contactMeLayout"
+            android:background="@drawable/style_btn_layout"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/title"
+                android:text="Still Need Help? Call Us"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/contactMeNo"
+                android:text="+1800-000-0021"
+                android:layout_below="@id/title"
+                android:textSize="20sp"
+                android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:src="@drawable/headset"
+                android:layout_margin="20dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+        </RelativeLayout>
+        <TextView
+            android:text="FAQs"
+            android:layout_marginVertical="15dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_marginHorizontal="2dp"
+            android:background="#CECECE"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+        <ListView
+            android:id="@+id/faqList"
+            android:divider="#CECECE"
+            android:dividerHeight="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progressBar"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="AVLoadingIndicatorView.Large"
+        android:layout_gravity="center"
+        app:indicatorColor="@color/colorAccent"
+        app:indicatorName="BallClipRotateMultipleIndicator"
+        />
+</RelativeLayout>

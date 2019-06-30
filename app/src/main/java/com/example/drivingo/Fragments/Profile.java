@@ -21,6 +21,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,9 +63,10 @@ import static android.app.Activity.RESULT_OK;
 public class Profile extends Fragment implements View.OnClickListener {
     private View myFragment;
     private OnFragmentInteractionListener mListener;
-    private Button btnLogout, btnChangePassword;
+    private ImageButton editProfilePic, editProfileInfo;
+    private Button btnLogout;
+    private ImageView profilePic;
     private TextView tvName, tvEmail, tvMobile;
-    private ImageView ivName, ivEmail, ivProfile;
     private AVLoadingIndicatorView progressbar;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -90,23 +92,21 @@ public class Profile extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_profile, container, false);
-        tvName = myFragment.findViewById(R.id.tvProfileName);
-        tvEmail = myFragment.findViewById(R.id.tvProfileEmail);
-        tvMobile = myFragment.findViewById(R.id.tvProfileMobile);
-        ivProfile = myFragment.findViewById(R.id.ivProfile);
-        ivName = myFragment.findViewById(R.id.ivProfileName);
-        ivEmail = myFragment.findViewById(R.id.ivProfileEmail);
-        btnLogout = myFragment.findViewById(R.id.btnLogOut);
-        btnChangePassword = myFragment.findViewById(R.id.btnChangePass);
+        tvName = myFragment.findViewById(R.id.textViewUsernameSurname);
+        tvEmail = myFragment.findViewById(R.id.textViewEmailProfile);
+        tvMobile = myFragment.findViewById(R.id.textViewPhoneProfile);
+        profilePic = myFragment.findViewById(R.id.imageViewProfile);
+        editProfilePic = myFragment.findViewById(R.id.buttonEditProfilePicture);
+        editProfileInfo = myFragment.findViewById(R.id.buttonEditProfileInfo);
+        btnLogout = myFragment.findViewById(R.id.buttonLogout);
         progressbar = myFragment.findViewById(R.id.progressBar);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
 
-        btnChangePassword.setOnClickListener(this);
+        editProfilePic.setOnClickListener(this);
+        editProfileInfo.setOnClickListener(this);
         btnLogout.setOnClickListener(this);
-        ivName.setOnClickListener(this);
-        ivEmail.setOnClickListener(this);
-        ivProfile.setOnClickListener(this);
+        editProfilePic.setOnClickListener(this);
         return myFragment;
     }
 
@@ -123,11 +123,11 @@ public class Profile extends Fragment implements View.OnClickListener {
             String email = user.getEmail();
             Uri pic = user.getPhotoUrl();
             if(name==null || name.isEmpty())
-                name = "Enter Name";
+                name = "Name";
             if(email==null || email.isEmpty())
-                email= "Enter Email";
+                email= "Email";
             if(pic!=null)
-                Picasso.with(getContext()).load(pic).into(ivProfile, new Callback() {
+                Picasso.with(getContext()).load(pic).into(profilePic, new Callback() {
                     @Override
                     public void onSuccess() {
                         enableButtons(true);
@@ -154,11 +154,8 @@ public class Profile extends Fragment implements View.OnClickListener {
             progressbar.hide();
         else
             progressbar.show();
-        ivProfile.setEnabled(b);
-        ivName.setEnabled(b);
-        ivEmail.setEnabled(b);
+        editProfilePic.setEnabled(b);
         btnLogout.setEnabled(b);
-        btnChangePassword.setEnabled(b);
     }
 
     @Override
@@ -182,22 +179,16 @@ public class Profile extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivProfile:
+            case R.id.buttonEditProfilePicture:
                 if(CommonValues.storageTask!=null&&CommonValues.storageTask.isInProgress())
                     Toast.makeText(context, "already in progress", Toast.LENGTH_SHORT).show();
                 else
                     chooseImage();
                 break;
-            case R.id.ivProfileName:
-                takeUserInput("Enter Name",1);
+            case R.id.buttonEditProfileInfo:
+                takeUserInput();
                 break;
-            case R.id.ivProfileEmail:
-                takeUserInput("Enter Email",2);
-                break;
-            case R.id.btnChangePass:
-
-                break;
-            case R.id.btnLogOut:
+            case R.id.buttonLogout:
                 LogOut();
                 break;
         }
@@ -209,37 +200,33 @@ public class Profile extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void takeUserInput(String title,final int code) {
-        final EditText editText = new EditText(context);
-        if(code==1) {
-            editText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-            editText.setText(user.getDisplayName());
-        }else if(code==2) {
-            editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            editText.setText(user.getEmail());
-        }
-
-        FrameLayout container = new FrameLayout(context);
-        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(50,0,50,0);
-        editText.setLayoutParams(params);
-        container.addView(editText);
-
+    private void takeUserInput() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title)
-                .setView(container)
+        View dialogBox = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit_info, null);
+        final EditText editTextName = dialogBox.findViewById(R.id.editProfileName);
+        final EditText editTextEmail = dialogBox.findViewById(R.id.editProfileEmail);
+        final EditText editTextPhone = dialogBox.findViewById(R.id.editProfileNumber);
+        
+        editTextName.setText(user.getDisplayName());
+        editTextEmail.setText(user.getEmail());
+        editTextPhone.setText(user.getPhoneNumber());
+        
+        builder.setTitle("Enter Info")
+                .setView(dialogBox)
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String str= editText.getText().toString().trim();
-                        if(code==1 &&(!str.equals(""))&& (str.matches("^[a-zA-Z\\s]*$"))){
-                            updateUserProfile(str,user.getPhotoUrl());
+                        String strname= editTextName.getText().toString().trim();
+                        String strEmail = editTextEmail.getText().toString();
+                        String strNumber = editTextPhone.getText().toString();
+                        if( !strname.equals("")&& strname.matches("^[a-zA-Z\\s]*$")){
+                            updateUserProfile(strname,user.getPhotoUrl());
                         }
-                        else if(code==1){
+                        else
                             Toast.makeText(context,"Invalid Name", Toast.LENGTH_LONG).show();
-                        }else if(code==2 && (!TextUtils.isEmpty(str) && Patterns.EMAIL_ADDRESS.matcher(str).matches())){
+                        if((!TextUtils.isEmpty(strEmail) && Patterns.EMAIL_ADDRESS.matcher(strEmail).matches())){
                             enableButtons(false);
-                            user.updateEmail(str).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            user.updateEmail(strEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     loadData();
@@ -333,7 +320,7 @@ public class Profile extends Fragment implements View.OnClickListener {
                             if(dataSnapshot.exists()){
                                 connected = dataSnapshot.getValue(Boolean.class);
                                 if(connected!=null && connected){
-                                    Picasso.with(context).load(profileImgPath).into(ivProfile);
+                                    Picasso.with(context).load(profileImgPath).into(profilePic);
                                     uploadImage();
                                 }else{
                                     Toast.makeText(context, "Check your connection", Toast.LENGTH_SHORT).show();
