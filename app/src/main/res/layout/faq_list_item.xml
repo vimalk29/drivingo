@@ -23,6 +23,7 @@
             android:layout_centerVertical="true"
             android:layout_width="50dp"
             android:layout_height="50dp" />
+
     </RelativeLayout>
     <TextView
         android:id="@+id/faqAnswerText"
